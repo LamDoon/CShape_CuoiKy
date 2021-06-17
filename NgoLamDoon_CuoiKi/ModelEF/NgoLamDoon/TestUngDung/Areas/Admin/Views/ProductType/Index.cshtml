@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ModelEF.Model.ProductType>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .pagination li {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->       
+        <div class="container-fluid page-body-wrapper" style="padding-top:0px;">
+           <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-lg-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Danh sách loại vải</h4>                                    
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.ID)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Name)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Description)
+                                                    </th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ID)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Description)
+                                                    </td>                                                    
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Thêm loại vải</h4>                                    
+                                    <div class="table-responsive">
+                                        @using (Html.BeginForm("Create", "ProductType"))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, null, new { @class = "alert alert-danger" })
+                                            <div class="form-group">
+                                                @Html.Label("Nhập tên loại vải")
+                                                @Html.TextBox("Name", "", new { @class = "form-control", @autofocus = "autofocus", @required = "" })
+                                                @Html.ValidationMessage("", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Mô tả")
+                                                @Html.TextArea("Description", "", new { @class = "form-control", @autofocus = "autofocus", @rows="5"})
+                                                @Html.ValidationMessage("", new { @class = "text-danger" })
+                                            </div>
+                                            <button class="btn btn-primary" type="submit">Thêm</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+               
+            </div>
+           
+        </div>        
+    </div>   
+</body>
+</html>
+
