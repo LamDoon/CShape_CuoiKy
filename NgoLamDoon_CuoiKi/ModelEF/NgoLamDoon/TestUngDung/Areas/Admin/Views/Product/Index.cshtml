@@ -1,0 +1,124 @@
+﻿@model IEnumerable<ModelEF.Model.Product>
+@using PagedList.Mvc
+@using PagedList
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .pagination li {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper" style="padding-top:0px;">
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @using (Html.BeginForm(new { @class = "form-group" }))
+                    {
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" name="keysearch" class="form-control" placeholder="Nhập tên tài khoản" aria-label="" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-primary" type="submit">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 grid-margin stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Danh sách sản phẩm</h4>
+                                        <p class="card-description">
+                                            @Html.ActionLink("Hiển thị danh sách sản phẩm", "Index")
+                                        </p>
+                                        @Html.ActionLink("Thêm sản phẩm", "Create","Product",new { @class = "badge badge-success" })
+                                        @if (Model.Count() == 0)
+                                        {
+                                            <label class="badge badge-warning">Không tìm thấy sản phẩm</label>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                @Html.DisplayNameFor(model => model.Image)
+                                                            </th>
+                                                            <th>
+                                                                @Html.DisplayNameFor(model => model.ID)
+                                                            </th>
+                                                            <th>
+                                                                @Html.DisplayNameFor(model => model.Name)
+                                                            </th>
+                                                            <th>
+                                                                @Html.DisplayNameFor(model => model.UnitCost)
+                                                            </th>
+                                                            <th>
+                                                                @Html.DisplayNameFor(model => model.Quantity)
+                                                            </th>
+                                                            <th>
+                                                                @Html.DisplayNameFor(model => model.IDType)
+                                                            </th>
+                                                            <th>Thao tác</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            <tr style="text-align:center",  id="row_@item.ID">
+                                                                <td class="py-1">
+                                                                    <img src="~/Upload/Images/@item.Image" alt="image" />
+                                                                </td>
+                                                                <td style="font-weight:bold">
+                                                                    @Html.DisplayFor(modelItem => item.ID)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.UnitCost)
+                                                                </td>
+                                                                <td style="color:royalblue">
+                                                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.ProductType.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.ActionLink("Chi tiết", "Details", new { idPrd = item.ID }, new { @class = "badge badge-warning" })                                                                    
+                                                                    @Ajax.ActionLink("Xoá","Delete", new { id= item.ID }, new AjaxOptions
+                                                           {
+                                                               Confirm="Bạn có chắc chắn xoá sản phẩm ID: "+@item.ID+" khỏi danh sách?",
+                                                               OnComplete = "$('#row_"+@item.ID+"').remove()",
+                                                               HttpMethod = "Delete"
+                                                           },new { @class = "badge badge-danger" } )
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+                    }
+                </div>                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
